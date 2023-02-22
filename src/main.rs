@@ -99,7 +99,7 @@ fn main() {
         train();
     } else if args.store {
         #[allow(unused_must_use)]
-        store();
+        let _ = store();
     } else if args.path {
         get_conf_path();
     }
