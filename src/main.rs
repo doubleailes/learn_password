@@ -24,8 +24,8 @@ struct Args {
     path: bool,
 
     /// Config name
-    #[arg(short, long, default_value_t = String::from("default-config"))]
-    count: String,
+    #[arg(short, long)]
+    name: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -58,30 +58,30 @@ fn get_app_name() -> String {
     "learn_password".to_string()
 }
 
-fn store_config(my_cfg: ConfyConfig) -> Result<(), confy::ConfyError> {
-    confy::store(&get_app_name(), None, my_cfg)?;
+fn store_config(my_cfg: ConfyConfig, config_name: Option<String>) -> Result<(), confy::ConfyError> {
+    confy::store(&get_app_name(), config_name.as_deref(), my_cfg)?;
     Ok(())
 }
 
-fn get_config() -> ConfyConfig {
-    confy::load(&get_app_name(), None).unwrap()
+fn get_config(config_name: Option<String>) -> ConfyConfig {
+    confy::load(&get_app_name(), config_name.as_deref()).unwrap()
 }
 
-fn get_conf_path() {
-    let file = confy::get_configuration_file_path(&get_app_name(), None).unwrap();
+fn get_conf_path(config_name: Option<String>) {
+    let file = confy::get_configuration_file_path(&get_app_name(), config_name.as_deref()).unwrap();
     println!("{}", file.display());
 }
 
-fn store() -> Result<(), confy::ConfyError> {
+fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
     let my_cfg = ConfyConfig {
         password_hashed: insert_password(),
     };
-    store_config(my_cfg)?;
+    store_config(my_cfg, config_name)?;
     Ok(())
 }
 
-fn train() {
-    let cfg: ConfyConfig = get_config();
+fn train(config_name: Option<String>) {
+    let cfg: ConfyConfig = get_config(config_name);
     let mut count: u8 = 0;
     let start = Instant::now();
     let mut password = insert_password();
@@ -96,11 +96,11 @@ fn train() {
 fn main() {
     let args = Args::parse();
     if args.train {
-        train();
+        train(args.name);
     } else if args.store {
         #[allow(unused_must_use)]
-        let _ = store();
+        let _ = store(args.name);
     } else if args.path {
-        get_conf_path();
+        get_conf_path(args.name);
     }
 }
