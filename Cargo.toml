@@ -7,7 +7,6 @@ authors = ["Philippe Llerena<philippe.llerena@gmail.com>"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hex-literal = "0.3.4"
 rpassword = "7.2.0"
 sha2 = "0.10.6"
 confy = "0.5.1"
