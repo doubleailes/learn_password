@@ -32,7 +32,7 @@ Untested feedbacks welcomes
 
 `learn_password(.exe) --help`
 
-```
+```bash
 Usage: learn_password(.exe) [OPTIONS]
 
 Options:
@@ -48,31 +48,50 @@ Options:
 
 Use  `learn_password(.exe) --store` to store a new password in default config entry.
 
+```bash
+$ learn_password -s
+Type a password:
+```
+
 #### Store specifig config
 
-To store multiple password, just name the config.
+To store a different password, just name the config.
 
 Use  `learn_password(.exe) --store --name toto`
 
-And it will store the password in a different config file
+And it will store the password in a different config file using name argument
 
 ### Train
 
-Use `learn_password(.exe) --train` to train the default config password
+Use `learn_password(.exe) --train` to train at the default config password
+
+```bash
+learn_password -t
+Type a password: 
+...
+Type a password: 
+Type a password: 
+Type a password: 
+Type a password: 
+You score 9 in a row in 18.95485371s
+```
 
 #### Train specifig config
 
-To train multiple password, just name the config.
+To start training with another config than default.
 
 Use  `learn_password(.exe) --train --name toto`
-
-And it will test the password in a different config file
 
 ### Check path
 
 If you wanna check the default config file path of your system
 
 `learn_password(.exe) --path`
+
+```bash
+learn_password -p
+~/.config/learn_password/default-config.toml
+```
 
 #### Check specifig config path
 
