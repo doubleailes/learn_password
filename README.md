@@ -93,7 +93,7 @@ learn_password -p
 ~/.config/learn_password/default-config.toml
 ```
 
-#### Check specifig config path
+#### Check specific config path
 
 To check multiple config, just name the config.
 
