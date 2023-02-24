@@ -5,8 +5,8 @@
 `learn_password` is a simple terminal tool to check if you have memorize
 a new password.
 
-It basicly store one of your password hashed ( sha512 ) in a config file
- and compare it in the test phase.
+It basically store one of your password hashed ( sha512 ) in a config file
+ and compare it in the test/train phase.
 
 ## Installation
 
