@@ -8,7 +8,7 @@ authors = ["Philippe Llerena<philippe.llerena@gmail.com>"]
 
 [dependencies]
 rpassword = "7.2.0"
-sha2 = "0.10.6"
+sha2 = "0.10.7"
 confy = "0.5.1"
 serde = "1.0.164"
 serde_derive = "1.0.164"
