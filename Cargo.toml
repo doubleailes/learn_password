@@ -12,4 +12,4 @@ sha2 = "0.10.7"
 confy = "0.5.1"
 serde = "1.0.174"
 serde_derive = "1.0.171"
-clap = { version = "4.3.12", features = ["derive"] }
+clap = { version = "4.3.19", features = ["derive"] }
