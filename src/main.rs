@@ -4,6 +4,7 @@ use sha2::{Digest, Sha512};
 use std::io::Write;
 use std::time::Instant;
 extern crate confy;
+use confy::ConfyError;
 #[macro_use]
 extern crate serde_derive;
 use clap::Parser;
@@ -63,13 +64,16 @@ fn store_config(my_cfg: ConfyConfig, config_name: Option<String>) -> Result<(), 
     Ok(())
 }
 
-fn get_config(config_name: Option<String>) -> ConfyConfig {
-    confy::load(&get_app_name(), config_name.as_deref()).unwrap()
+fn get_config(config_name: Option<String>) -> Result<ConfyConfig, ConfyError> {
+    confy::load(&get_app_name(), config_name.as_deref())
 }
 
 fn get_conf_path(config_name: Option<String>) {
-    let file = confy::get_configuration_file_path(&get_app_name(), config_name.as_deref()).unwrap();
-    println!("{}", file.display());
+    let file = confy::get_configuration_file_path(&get_app_name(), config_name.as_deref());
+    match file {
+        Ok(val) => println!("{}", val.display()),
+        Err(err) => panic!("{}", err),
+    }
 }
 
 fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
@@ -81,7 +85,10 @@ fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
 }
 
 fn train(config_name: Option<String>) {
-    let cfg: ConfyConfig = get_config(config_name);
+    let cfg = match get_config(config_name) {
+        Ok(val) => val,
+        Err(err) => panic!("{}", err),
+    };
     let mut count: u8 = 0;
     let start = Instant::now();
     let mut password = insert_password();
