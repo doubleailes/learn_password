@@ -79,11 +79,15 @@ fn test_check_password() {
     assert!(check_password(password, &hash).unwrap());
 }
 
-fn input_password() -> Result<String, argon2::password_hash::Error> {
+fn input_password() -> String {
     print!("Type a password: ");
     std::io::stdout().flush().unwrap();
     let base_password = read_password().unwrap();
-    let result: String = hash_password(&base_password)?;
+    base_password
+}
+
+fn input_passwordand_hash() -> Result<String, argon2::password_hash::Error> {
+    let result: String = hash_password(&input_password())?;
     Ok(result)
 }
 
@@ -135,7 +139,7 @@ fn test_get_conf_path() {
 
 fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
     let my_cfg: ConfyConfig = ConfyConfig {
-        password_hashed: input_password().expect("Error while hashing password"),
+        password_hashed: input_passwordand_hash().expect("Error while hashing password"),
     };
     store_config(my_cfg, config_name)?;
     Ok(())
@@ -156,7 +160,7 @@ fn train(config_name: Option<String>) -> Result<(), argon2::password_hash::Error
     let password_hashed: String = get_config(config_name).get_password_hashed();
     let mut count: u16 = 0;
     let start: Instant = Instant::now();
-    while check_password(&input_password()?, &password_hashed)? {
+    while check_password(&input_password(), &password_hashed)? {
         count += 1;
     }
     println!("Check password failed");
