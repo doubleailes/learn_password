@@ -110,8 +110,9 @@ fn test_get_config() {
     let my_cfg = ConfyConfig {
         password_hashed: "prout".to_string(),
     };
-    store_config(my_cfg, None).unwrap();
-    let cfg: ConfyConfig = get_config(None);
+    let config_name = Some("test_get_config".to_string());
+    store_config(my_cfg, config_name.clone()).unwrap();
+    let cfg: ConfyConfig = get_config(config_name);
     assert_eq!(cfg.password_hashed, "prout".to_string());
 }
 
@@ -126,9 +127,10 @@ fn test_get_conf_path() {
     let my_cfg = ConfyConfig {
         password_hashed: "prout".to_string(),
     };
-    store_config(my_cfg, None).unwrap();
-    let path: String = get_conf_path(None);
-    assert!(path.ends_with(".config/learn_password/default-config.toml"));
+    let config_name = Some("test_get_conf_path".to_string());
+    store_config(my_cfg, config_name.clone()).unwrap();
+    let path: String = get_conf_path(config_name);
+    assert!(path.ends_with(".config/learn_password/test_get_conf_path.toml"));
 }
 
 fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
@@ -144,8 +146,9 @@ fn test_store() {
     let my_cfg: ConfyConfig = ConfyConfig {
         password_hashed: "prout".to_string(),
     };
-    let _ = store_config(my_cfg, Some("test".to_string()));
-    let cfg: ConfyConfig = get_config(Some("test".to_string()));
+    let config_name = Some("test_store".to_string());
+    let _ = store_config(my_cfg, config_name.clone());
+    let cfg: ConfyConfig = get_config(config_name);
     assert_eq!(cfg.password_hashed, "prout".to_string());
 }
 
