@@ -8,9 +8,9 @@ authors = ["Philippe Llerena<philippe.llerena@gmail.com>"]
 
 [dependencies]
 rpassword = "7.3.1"
-confy = "0.5.1"
+confy = "0.6.0"
 serde = "1.0.195"
 serde_derive = "1.0.195"
-clap = { version = "4.4.13", features = ["derive"] }
+clap = { version = "4.4.18", features = ["derive"] }
 argon2 = { version = "0.5.2", features = ["default"] }
-rand_core = { version = "0.6.3", features = ["std"] }
+rand_core = { version = "0.6.4", features = ["std"] }
