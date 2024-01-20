@@ -44,6 +44,11 @@ impl Default for ConfyConfig {
         }
     }
 }
+impl ConfyConfig {
+    fn get_password_hashed(&self) -> String {
+        self.password_hashed.clone()
+    }
+}
 
 fn hash_password(password: &str) -> Result<String, argon2::password_hash::Error> {
     let salt_string = SaltString::generate(&mut OsRng);
@@ -145,10 +150,10 @@ fn test_store() {
 }
 
 fn train(config_name: Option<String>) -> Result<(), argon2::password_hash::Error> {
-    let cfg: ConfyConfig = get_config(config_name);
+    let password_hashed: String = get_config(config_name).get_password_hashed();
     let mut count: u16 = 0;
     let start: Instant = Instant::now();
-    while check_password(&input_password()?, &cfg.password_hashed).unwrap() {
+    while check_password(&input_password()?, &password_hashed)? {
         count += 1;
     }
     println!("Check password failed");
