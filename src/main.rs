@@ -110,10 +110,20 @@ fn test_get_config() {
     assert_eq!(cfg.password_hashed, "prout".to_string());
 }
 
-fn get_conf_path(config_name: Option<String>) {
+fn get_conf_path(config_name: Option<String>) -> String {
     let file: std::path::PathBuf =
         confy::get_configuration_file_path(&get_app_name(), config_name.as_deref()).unwrap();
-    println!("{}", file.display());
+    file.display().to_string()
+}
+
+#[test]
+fn test_get_conf_path() {
+    let my_cfg = ConfyConfig {
+        password_hashed: "prout".to_string(),
+    };
+    store_config(my_cfg, None).unwrap();
+    let path: String = get_conf_path(None);
+    assert!(path.ends_with(".config/learn_password/default-config.toml"));
 }
 
 fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
@@ -124,6 +134,16 @@ fn store(config_name: Option<String>) -> Result<(), confy::ConfyError> {
     Ok(())
 }
 
+#[test]
+fn test_store() {
+    let my_cfg: ConfyConfig = ConfyConfig {
+        password_hashed: "prout".to_string(),
+    };
+    let _ = store_config(my_cfg, Some("test".to_string()));
+    let cfg: ConfyConfig = get_config(Some("test".to_string()));
+    assert_eq!(cfg.password_hashed, "prout".to_string());
+}
+
 fn train(config_name: Option<String>) -> Result<(), argon2::password_hash::Error> {
     let cfg: ConfyConfig = get_config(config_name);
     let mut count: u16 = 0;
@@ -131,9 +151,20 @@ fn train(config_name: Option<String>) -> Result<(), argon2::password_hash::Error
     while check_password(&input_password()?, &cfg.password_hashed).unwrap() {
         count += 1;
     }
+    println!("Check password failed");
     let duration: std::time::Duration = start.elapsed();
     println!("You score {} in a row in {:?}", count, duration);
     Ok(())
+}
+
+#[test]
+fn test_train() {
+    let my_cfg: ConfyConfig = ConfyConfig {
+        password_hashed: hash_password("prout").unwrap(),
+    };
+    let _ = store_config(my_cfg, Some("test_train".to_string()));
+    let cfg: ConfyConfig = get_config(Some("test_train".to_string()));
+    assert!(check_password("prout", cfg.password_hashed.as_str()).unwrap());
 }
 
 fn main() {
@@ -143,6 +174,7 @@ fn main() {
     } else if args.store {
         let _ = store(args.name);
     } else if args.path {
-        get_conf_path(args.name);
+        let path = get_conf_path(args.name);
+        println!("{}", path);
     }
 }
